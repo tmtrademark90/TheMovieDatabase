@@ -60,8 +60,10 @@ class ShowViewController: UITableViewController {
         
 //        cell.posterview.setImageWithUrl(imageUrl!)
         cell.posterview.setImageWith(imageUrl! as URL)
-        cell.textLabel?.text = (title)
-        cell.overviewlabel?.text = (overview)
+        cell.titlelabel.text = (title)
+        cell.overviewlabel.text = (overview)
+        
+        
         print ("row /(indexPath.row)")
         return cell
     }
@@ -70,7 +72,7 @@ class ShowViewController: UITableViewController {
 //        let apiKey = "d8a7063921e444c5d700832f8c07d3af"
 //        let url = URL("https://api.themoviedb.org/3/tv/popular?api_key=d8a7063921e444c5d700832f8c07d3af")
         let apiKey = "d8a7063921e444c5d700832f8c07d3af"
-        let url = NSURL("https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
+        let url = URL("https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
         let request = URLRequest(
             url: url as URL,
             cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
