@@ -9,27 +9,21 @@
 
 import UIKit
 import AFNetworking
-import SwiftyJSON
-import Alamofire
 
-class ShowViewController: UITableViewController{
-    
-   
-    
-    @IBOutlet var showtable: UITableView!
-    
+class ShowViewController: UITableViewController {
     
     var shows: [NSDictionary]?
 
+    @IBOutlet weak var showview: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        tableView.dataSource = self
-//        tableView.delegate = self
-//on did load calls the fucntion to fetch shows from The Movie Database
-        
-        fetchShows()
 
+
+        // Calls the function to retrieve shows from the movie database.
+        fetchShows()
+    
+        //tableView.reloadData()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -44,23 +38,29 @@ class ShowViewController: UITableViewController{
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return shows!.count
-    }
+    //override func numberOfSections(in tableView: UITableView) -> Int {
+        //**Begin Copy**
+        //7) Change to return 1
+       // return 1
+        //**End Copy**
+   // }
+override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int)
-        ->Int {
-            return shows!.count
+    if let count = self.shows?.count {
+        return (count)
+    } else {
+        //allUsers is nil, so just return 0
+        return 0
+    }
+   
+    
 }
-    func tableView(tableView: UITableView, cellForRowAt indexPath: IndexPath) ->UITableViewCell {
+      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as? showcell
-//        let cellid = "showcell"
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: (indexPath as IndexPath))as! showcell
-let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath) as! showcell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as! showcell
         
         let show = shows![indexPath.row]
-        let title = show ["title"] as! String
+        let title = show ["name"] as! String
         let overview = show["overview"] as! String
         let posterpath = show["poster_path"] as! String
        
@@ -77,65 +77,44 @@ let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexP
         return cell
     }
     
-
-
+   
     
     
-
+    
+    
+    
+    
+    
+    
+    
+    
     func fetchShows(){
-//        let apiKey = "d8a7063921e444c5d700832f8c07d3af"
-//        let url = URL("https://api.themoviedb.org/3/tv/popular?api_key=d8a7063921e444c5d700832f8c07d3af")
         let apiKey = "d8a7063921e444c5d700832f8c07d3af"
-        let website = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
-
-//        cachePolicy;: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
-//    timeoutInterval: 10)
-//let session = URLSession(
-//    configuration: URLSessionConfiguration.default,
-//    delegate: nil,
-//    delegateQueue: OperationQueue.main
-//)
-//let task: URLSessionDataTask = session.dataTask( with: request, completionHandler: { (dataOrNil, response, error) in
-//    if let data = dataOrNil {
-//        if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[])
-//            as? NSDictionary{
-//            print("response: \(responseDictionary)")
-//        }
-//    }
-//})
-//task.resume()
-//
-
-
+        let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
+        let request = URLRequest(
+            url: url!,
+            cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
+            timeoutInterval: 10)
+        let session = URLSession(
+            configuration: URLSessionConfiguration.default,
+            delegate: nil,
+            delegateQueue: OperationQueue.main
+        )
+        let task: URLSessionDataTask = session.dataTask( with: request, completionHandler: { (dataOrNil, response, error) in
+            if let data = dataOrNil {
+                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[])
+                    as? NSDictionary{
+                    print("response: \(responseDictionary)")
+                    self.shows = (responseDictionary["results"] as! [NSDictionary])
+                    self.tableView.reloadData()
+                }
+            }
+        })
+        task.resume()
+    }
 }
-}
-////        let request = URLRequest(
-////            website: website ,
-////            cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
-////            timeoutInterval: 10)
-//        let session = URLSession(
-//            configuration: URLSessionConfiguration.default,
-//            delegate: nil,
-//            delegateQueue: OperationQueue.main
-//        )
-//        let task: URLSessionDataTask = session.dataTask( with: request, completionHandler: { (dataOrNil, response, error) in
-//            if let data = dataOrNil {
-//                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[])
-//                    as? NSDictionary{
-//                    print("response: \(responseDictionary)")
-//                    self.shows = responseDictionary["results"] as! [NSDictionary]
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        })
-//        task.resume()
-//    }
-//}
-
-
-
-
-/*
+    
+    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
 
@@ -189,53 +168,3 @@ let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexP
         // Pass the selected object to the new view controller.
     }
     */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//let apiKey = "d8a7063921e444c5d700832f8c07d3af"
-//let url = NSURL(https://api.themoviedb.org/3/tv/popular?api_key=\(apikey)&language=en-US&page=1)
-//let request = URLRequest(
-//    url: url as URL,
-//    cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
-//    timeoutInterval: 10)
-//let session = URLSession(
-//    configuration: URLSessionConfiguration.default,
-//    delegate: nil,
-//    delegateQueue: OperationQueue.main
-//)
-//let task: URLSessionDataTask = session.dataTask( with: request, completionHandler: { (dataOrNil, response, error) in
-//    if let data = dataOrNil {
-//        if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[])
-//            as? NSDictionary{
-//            print("response: \(responseDictionary)")
-//        }
-//    }
-//})
-//task.resume()
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
-

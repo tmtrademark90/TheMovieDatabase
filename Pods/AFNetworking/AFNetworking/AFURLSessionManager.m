@@ -160,14 +160,10 @@ typedef void (^AFURLSessionTaskCompletionHandler)(NSURLResponse *response, id re
         [strongTask suspend];
     }];
     if ([self.uploadProgress respondsToSelector:@selector(setResumingHandler:)]) {
-        if (@available(iOS 9.0, *)) {
-            [self.uploadProgress setResumingHandler:^{
-                __typeof__(weakTask) strongTask = weakTask;
-                [strongTask resume];
-            }];
-        } else {
-            // Fallback on earlier versions
-        }
+        [self.uploadProgress setResumingHandler:^{
+            __typeof__(weakTask) strongTask = weakTask;
+            [strongTask resume];
+        }];
     }
 
     [self.downloadProgress setCancellable:YES];
@@ -182,14 +178,10 @@ typedef void (^AFURLSessionTaskCompletionHandler)(NSURLResponse *response, id re
     }];
 
     if ([self.downloadProgress respondsToSelector:@selector(setResumingHandler:)]) {
-        if (@available(iOS 9.0, *)) {
-            [self.downloadProgress setResumingHandler:^{
-                __typeof__(weakTask) strongTask = weakTask;
-                [strongTask resume];
-            }];
-        } else {
-            // Fallback on earlier versions
-        }
+        [self.downloadProgress setResumingHandler:^{
+            __typeof__(weakTask) strongTask = weakTask;
+            [strongTask resume];
+        }];
     }
 
     [task addObserver:self
