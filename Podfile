@@ -6,6 +6,7 @@ target 'TheMovieDatabase' do
   use_frameworks!
 pod 'Alamofire'
 pod 'AFNetworking'
+pod 'SwiftyJSON'
   # Pods for TheMovieDatabase
 
 end
