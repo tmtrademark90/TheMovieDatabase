@@ -11,7 +11,7 @@ import UIKit
 class DetailsViewController: UIViewController {
     
     var show: NSDictionary! = NSDictionary()
-
+    //var show2: NSDictionary! = NSDictionary()
     @IBOutlet var posterimg: UIImageView!
     @IBOutlet var ratinglbl: UILabel!
     @IBOutlet var countlbl: UILabel!

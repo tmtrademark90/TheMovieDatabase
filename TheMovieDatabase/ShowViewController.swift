@@ -13,7 +13,7 @@ import AFNetworking
 class ShowViewController: UITableViewController {
     
     var shows: [NSDictionary]?
-
+    //var shows2: [NSDictionary]?
     @IBOutlet weak var showview: UITableView!
     
     override func viewDidLoad() {
@@ -23,6 +23,7 @@ class ShowViewController: UITableViewController {
         // Calls the function to retrieve shows from the movie database.
         fetchShows()
     
+        //fetchShows2()
         //tableView.reloadData()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -46,21 +47,25 @@ class ShowViewController: UITableViewController {
    // }
 override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
+    
     if let count = self.shows?.count {
         return (count)
     } else {
         //allUsers is nil, so just return 0
         return 0
     }
-   
-    
+
+
 }
   
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as? showcell
+
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as! showcell
+       // let cell2 = tableView.dequeueReusableCell(withIdentifier: "show2cell", for: indexPath as IndexPath) as! show2cell
         
         let show = shows![indexPath.row]
+//        let show2 = shows2![indexPath.row]
         let title = show ["name"] as! String
         let overview = show["overview"] as! String
         let posterpath = show["poster_path"] as! String
@@ -73,20 +78,48 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
         cell.titlelabel.text = (title)
         cell.overviewlabel.text = (overview)
         
-        
+//        cell2.titlelbl.text = (title)
+//        cell2.overviewlbl.text = (overview)
+//        cell2.img2.setImageWith(imageUrl! as URL)
         print ("row /(indexPath.row)")
         return cell
     }
+    
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        //        let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as? showcell
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "show2cell", for: indexPath as IndexPath) as! show2cell
+//
+//        let shows2 = shows2![indexPath.row]
+//        let title = show2 ["name"] as! String
+//        let overview = show2 ["overview"] as! String
+//        let posterpath = show2 ["poster_path"] as! String
+//
+//        let baseUrl = "https://image.tmdb.org/t/p/w500"
+//        let imageUrl = NSURL(string: baseUrl + posterpath)
+//
+//
+//        cell.posterview.setImageWith(imageUrl! as URL)
+//        cell.titlelabel.text = (title)
+//        cell.overviewlabel.text = (overview)
+//
+//
+//        print ("row /(indexPath.row)")
+//        return cell
+//    }
+    
+    
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "showDetails", sender: self)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetails" {
-            let index = tableView.indexPathForSelectedRow as! IndexPath
+            let index = tableView.indexPathForSelectedRow
             
             
-            var vc = segue.destination as! DetailsViewController
-            vc.show = shows![index.row]
+            let vc = segue.destination as! DetailsViewController
+            vc.show = shows![(index?.row)!]
+            //vc.show2 = shows2![(index?.row)!]
             print("\(vc.show)")
         }
     }
@@ -114,7 +147,36 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
         })
         task.resume()
     }
+//    func fetchShows2(){
+//        let apiKey = "d8a7063921e444c5d700832f8c07d3af"
+//        let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=2")
+//        let request = URLRequest(
+//            url: url!,
+//            cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
+//            timeoutInterval: 10)
+//        let session = URLSession(
+//            configuration: URLSessionConfiguration.default,
+//            delegate: nil,
+//            delegateQueue: OperationQueue.main
+//        )
+//        let task: URLSessionDataTask = session.dataTask( with: request, completionHandler: { (dataOrNil, response, error) in
+//            if let data = dataOrNil {
+//                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[])
+//                    as? NSDictionary{
+//                    print("response: \(responseDictionary)")
+//                    self.shows2 = (responseDictionary["results"] as! [NSDictionary])
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        })
+//        task.resume()
+//    }
+
+
 }
+
+
+
     
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

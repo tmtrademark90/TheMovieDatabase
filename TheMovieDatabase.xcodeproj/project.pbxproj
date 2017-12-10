@@ -16,6 +16,7 @@
 		DE66E9DF1FDB734F00A12CEB /* ShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE66E9DE1FDB734F00A12CEB /* ShowViewController.swift */; };
 		DE66E9E11FDB8DF800A12CEB /* showcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE66E9E01FDB8DF800A12CEB /* showcell.swift */; };
 		DE7A34E11FDC8DCF00A916E2 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7A34E01FDC8DCF00A916E2 /* DetailsViewController.swift */; };
+		DE7A352F1FDDB8B900A916E2 /* show2cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7A352E1FDDB8B900A916E2 /* show2cell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		DE66E9DE1FDB734F00A12CEB /* ShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowViewController.swift; sourceTree = "<group>"; };
 		DE66E9E01FDB8DF800A12CEB /* showcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = showcell.swift; sourceTree = "<group>"; };
 		DE7A34E01FDC8DCF00A916E2 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		DE7A352E1FDDB8B900A916E2 /* show2cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = show2cell.swift; sourceTree = "<group>"; };
 		ED465AB0E604CDBB29BA0347 /* Pods_TheMovieDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TheMovieDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -93,6 +95,7 @@
 				DE66E9DE1FDB734F00A12CEB /* ShowViewController.swift */,
 				DE66E9E01FDB8DF800A12CEB /* showcell.swift */,
 				DE7A34E01FDC8DCF00A916E2 /* DetailsViewController.swift */,
+				DE7A352E1FDDB8B900A916E2 /* show2cell.swift */,
 			);
 			path = TheMovieDatabase;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				DE66E9E11FDB8DF800A12CEB /* showcell.swift in Sources */,
 				DE66E9DF1FDB734F00A12CEB /* ShowViewController.swift in Sources */,
 				DE7A34E11FDC8DCF00A916E2 /* DetailsViewController.swift in Sources */,
+				DE7A352F1FDDB8B900A916E2 /* show2cell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
