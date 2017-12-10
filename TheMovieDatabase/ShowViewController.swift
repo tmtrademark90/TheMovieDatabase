@@ -55,7 +55,8 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
    
     
 }
-      override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as? showcell
         let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as! showcell
         
@@ -67,7 +68,7 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
         let baseUrl = "https://image.tmdb.org/t/p/w500"
         let imageUrl = NSURL(string: baseUrl + posterpath)
         
-//        cell.posterview.setImageWithUrl(imageUrl!)
+
         cell.posterview.setImageWith(imageUrl! as URL)
         cell.titlelabel.text = (title)
         cell.overviewlabel.text = (overview)
@@ -76,18 +77,14 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
         print ("row /(indexPath.row)")
         return cell
     }
-    
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showDetails", sender: self)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? DetailsViewController {
+            
+        }
+    }
     func fetchShows(){
         let apiKey = "d8a7063921e444c5d700832f8c07d3af"
         let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
@@ -168,3 +165,26 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
         // Pass the selected object to the new view controller.
     }
     */
+
+
+
+
+//        let apiKey = "d8a7063921e444c5d700832f8c07d3af"
+//        let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)")
+////        let url = URL(string: "https://api.opendota.com/api/heroStats")
+//
+//        URLSession.shared.dataTask(with: url!) { (data, response, error) in
+//            if error == nil {
+//                do{
+//                    self.shows = try JSONDecoder().decode([showthings].self, from: data!)
+//                    DispatchQueue.main.async {
+//                        completed()
+//                    }
+//                }catch {
+//                    print("JSON Error")
+//                }
+//            }
+//        }.resume()
+//    }
+//}
+
