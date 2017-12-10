@@ -81,8 +81,13 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
         performSegue(withIdentifier: "showDetails", sender: self)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? DetailsViewController {
+        if segue.identifier == "showDetails" {
+            let index = tableView.indexPathForSelectedRow as! IndexPath
             
+            
+            var vc = segue.destination as! DetailsViewController
+            vc.show = shows![index.row]
+            print("\(vc.show)")
         }
     }
     func fetchShows(){
