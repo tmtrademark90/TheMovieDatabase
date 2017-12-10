@@ -22,17 +22,19 @@ class DetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ratinglbl.text = "\(show["vote_average"] as! NSNumber)"
-        countlbl.text = "\(show["vote_count"] as! NSNumber)"
+        let baseUrl = "https://image.tmdb.org/t/p/w500"
+        
+        ratinglbl.text = "Rating \(show["vote_average"] as! NSNumber)"
+        countlbl.text = "Vote Count \(show["vote_count"] as! NSNumber)"
         namelbl.text = "\(show["name"] as! NSString)"
         desclbl.text = "\(show["overview"] as! NSString)"
-        let bgpath = show["backdrop_path"] as! String
+        if let bgpath = show["backdrop_path"] as? String {
+            let bgUrl = NSURL(string: baseUrl + bgpath)
+            bgimg.setImageWith(bgUrl! as URL)
+        }
         let posterpath = show["poster_path"] as! String
-        let baseUrl = "https://image.tmdb.org/t/p/w500"
         let imageUrl = NSURL(string: baseUrl + posterpath)
-        let bgUrl = NSURL(string: baseUrl + bgpath)
         posterimg.setImageWith(imageUrl! as URL)
-        bgimg.setImageWith(bgUrl! as URL)
         // Do any additional setup after loading the view.
     }
 

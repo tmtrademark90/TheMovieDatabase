@@ -13,23 +13,14 @@ import AFNetworking
 class ShowViewController: UITableViewController {
     
     var shows: [NSDictionary]?
-    //var shows2: [NSDictionary]?
     @IBOutlet weak var showview: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
 
-        // Calls the function to retrieve shows from the movie database.
-        fetchShows()
-    
-        //fetchShows2()
-        //tableView.reloadData()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        // Calls the function to retrieve shows from the movie database. Starting on page 1.
+        fetchShows(page: 1)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,35 +28,19 @@ class ShowViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
-    //override func numberOfSections(in tableView: UITableView) -> Int {
-        //**Begin Copy**
-        //7) Change to return 1
-       // return 1
-        //**End Copy**
-   // }
-override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-    
+// Set the amount of rows for table view.
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if let count = self.shows?.count {
-        return (count)
+        return count
     } else {
-        //allUsers is nil, so just return 0
         return 0
     }
-
-
 }
-  
+  // Set the cell information in the table view.
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as! showcell
-       // let cell2 = tableView.dequeueReusableCell(withIdentifier: "show2cell", for: indexPath as IndexPath) as! show2cell
-        
+
         let show = shows![indexPath.row]
-//        let show2 = shows2![indexPath.row]
         let title = show ["name"] as! String
         let overview = show["overview"] as! String
         let posterpath = show["poster_path"] as! String
@@ -73,59 +48,40 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
         let baseUrl = "https://image.tmdb.org/t/p/w500"
         let imageUrl = NSURL(string: baseUrl + posterpath)
         
-
         cell.posterview.setImageWith(imageUrl! as URL)
         cell.titlelabel.text = (title)
         cell.overviewlabel.text = (overview)
         
-//        cell2.titlelbl.text = (title)
-//        cell2.overviewlbl.text = (overview)
-//        cell2.img2.setImageWith(imageUrl! as URL)
-        print ("row /(indexPath.row)")
+        cell.layoutIfNeeded()
+        
         return cell
     }
-    
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        //        let cell = tableView.dequeueReusableCell(withIdentifier: "showcell", for: indexPath as IndexPath) as? showcell
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "show2cell", for: indexPath as IndexPath) as! show2cell
-//
-//        let shows2 = shows2![indexPath.row]
-//        let title = show2 ["name"] as! String
-//        let overview = show2 ["overview"] as! String
-//        let posterpath = show2 ["poster_path"] as! String
-//
-//        let baseUrl = "https://image.tmdb.org/t/p/w500"
-//        let imageUrl = NSURL(string: baseUrl + posterpath)
-//
-//
-//        cell.posterview.setImageWith(imageUrl! as URL)
-//        cell.titlelabel.text = (title)
-//        cell.overviewlabel.text = (overview)
-//
-//
-//        print ("row /(indexPath.row)")
-//        return cell
-//    }
-    
-    
-    
+    // Goes through and grabs the new information to update the page information.
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let element = shows!.count - 5
+        let current_page = shows!.count / 20
+        if indexPath.row == element {
+            fetchShows(page: current_page + 1)
+        }
+    }
+   
+    // move to details page
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "showDetails", sender: self)
     }
+   // sets show to display the correct show data
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetails" {
             let index = tableView.indexPathForSelectedRow
-            
-            
             let vc = segue.destination as! DetailsViewController
             vc.show = shows![(index?.row)!]
-            //vc.show2 = shows2![(index?.row)!]
-            print("\(vc.show)")
         }
     }
-    func fetchShows(){
+    
+    // Fucntion that grabs show information and allows the api page to be updated.
+    func fetchShows(page: Int){
         let apiKey = "d8a7063921e444c5d700832f8c07d3af"
-        let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=1")
+        let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=\(page)")
         let request = URLRequest(
             url: url!,
             cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
@@ -139,119 +95,18 @@ override func tableView(_ tableView: UITableView, numberOfRowsInSection section:
             if let data = dataOrNil {
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[])
                     as? NSDictionary{
-                    print("response: \(responseDictionary)")
-                    self.shows = (responseDictionary["results"] as! [NSDictionary])
+                    if (page == 1) {
+                        self.shows = (responseDictionary["results"] as! [NSDictionary])
+                    } else {
+                        for show in responseDictionary["results"] as! [NSDictionary] {
+                            self.shows!.append(show)
+                        }
+                    }
+                    
                     self.tableView.reloadData()
                 }
             }
         })
         task.resume()
     }
-//    func fetchShows2(){
-//        let apiKey = "d8a7063921e444c5d700832f8c07d3af"
-//        let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)&language=en-US&page=2")
-//        let request = URLRequest(
-//            url: url!,
-//            cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData,
-//            timeoutInterval: 10)
-//        let session = URLSession(
-//            configuration: URLSessionConfiguration.default,
-//            delegate: nil,
-//            delegateQueue: OperationQueue.main
-//        )
-//        let task: URLSessionDataTask = session.dataTask( with: request, completionHandler: { (dataOrNil, response, error) in
-//            if let data = dataOrNil {
-//                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[])
-//                    as? NSDictionary{
-//                    print("response: \(responseDictionary)")
-//                    self.shows2 = (responseDictionary["results"] as! [NSDictionary])
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        })
-//        task.resume()
-//    }
-
-
 }
-
-
-
-    
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-
-
-
-//        let apiKey = "d8a7063921e444c5d700832f8c07d3af"
-//        let url = URL(string:"https://api.themoviedb.org/3/tv/popular?api_key=\(apiKey)")
-////        let url = URL(string: "https://api.opendota.com/api/heroStats")
-//
-//        URLSession.shared.dataTask(with: url!) { (data, response, error) in
-//            if error == nil {
-//                do{
-//                    self.shows = try JSONDecoder().decode([showthings].self, from: data!)
-//                    DispatchQueue.main.async {
-//                        completed()
-//                    }
-//                }catch {
-//                    print("JSON Error")
-//                }
-//            }
-//        }.resume()
-//    }
-//}
-
